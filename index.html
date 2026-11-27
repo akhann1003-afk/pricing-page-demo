@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plans and Pricing</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: #111115;
+    --line: #23232b;
+    --text: #f4f4f6;
+    --muted: #9a9aa6;
+    --blue: #3b82f6;
+    --green: #4ade80;
+    --emerald: #059669;
+    --radius: 16px;
+    --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1160px; margin: 0 auto; padding: 96px 24px 72px; }
+
+  /* Header */
+  .head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px; font-weight: 600; letter-spacing: .12em;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.05; letter-spacing: -.035em; font-weight: 650;
+  }
+  .sub { margin: 0 auto 36px; max-width: 46ch; color: var(--muted); font-size: 18px; line-height: 1.55; }
+
+  /* Billing toggle */
+  .toggle {
+    display: inline-flex; padding: 4px; gap: 4px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+  }
+  .toggle button {
+    appearance: none; border: 0; cursor: pointer;
+    padding: 10px 20px; border-radius: 999px;
+    background: transparent; color: var(--muted);
+    font: inherit; font-size: 14px; font-weight: 500;
+    transition: background-color .2s, color .2s;
+  }
+  .toggle button[aria-pressed="true"] { background: #26262e; color: var(--text); }
+  .toggle .save { color: var(--green); font-weight: 600; margin-left: 6px; font-size: 12px; }
+
+  /* Grid */
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; align-items: stretch;
+  }
+
+  /* Card */
+  .card {
+    --accent: var(--blue);
+    --glow: 59, 130, 246;
+    position: relative;
+    display: flex; flex-direction: column;
+    padding: 32px 28px 32px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+    border-radius: var(--radius);
+    box-shadow: 0 -14px 40px -22px rgba(var(--glow), .35);
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .card.pro { --accent: var(--green); --glow: 74, 222, 128; }
+  .card.adv { --accent: var(--emerald); --glow: 5, 150, 105; }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 -18px 56px -18px rgba(var(--glow), .7);
+    border-color: #2f2f39;
+    border-top-color: var(--accent);
+  }
+  .card.pro {
+    background: #121317;
+    box-shadow: 0 -16px 48px -20px rgba(var(--glow), .5);
+  }
+
+  .top { display: flex; align-items: center; justify-content: space-between; min-height: 28px; margin-bottom: 28px; }
+  .icon-sq {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--accent);
+  }
+  .pop {
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(74,222,128,.12); color: var(--green);
+    border: 1px solid rgba(74,222,128,.35);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  }
+
+  .plan { margin: 0 0 8px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .price { display: flex; align-items: baseline; gap: 6px; min-height: 56px; margin-bottom: 4px; }
+  .amount { font-size: 48px; line-height: 1.1; font-weight: 650; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .per { color: var(--muted); font-size: 15px; }
+  .billed { margin: 0 0 16px; min-height: 22px; font-size: 13px; color: var(--muted); }
+  .desc { margin: 0 0 28px; color: var(--muted); font-size: 15px; line-height: 1.55; min-height: 46px; }
+
+  .cta {
+    display: block; width: 100%;
+    padding: 14px 20px; border-radius: 10px;
+    text-align: center; text-decoration: none;
+    font-size: 15px; font-weight: 600;
+    background: #1c1c23; color: var(--text); border: 1px solid #2c2c36;
+    transition: background-color .2s, border-color .2s, transform .2s;
+  }
+  .cta:hover { background: #24242d; border-color: #3a3a46; }
+  .cta:active { transform: scale(.99); }
+  .pro .cta { background: #f4f4f6; color: #0a0a0f; border-color: #f4f4f6; box-shadow: 0 6px 24px -8px rgba(74,222,128,.45); }
+  .pro .cta:hover { background: #fff; border-color: #fff; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 32px 0 20px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .12em; }
+  .divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+
+  .features { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .features li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: #d6d6dc; }
+  .features svg { flex: none; width: 18px; height: 18px; margin-top: 2px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .foot { margin: 56px 0 0; text-align: center; color: var(--muted); font-size: 15px; }
+
+  :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+    .page { padding-top: 64px; }
+    .desc, .price { min-height: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    .card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><path d="M16 4.7a3.5 3.5 0 0 1 0 6.6M18.5 14.8c1.7.7 2.8 2.3 3 4.7"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="m8 15 3-4 3 2 4-6"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/></symbol>
+    <symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M16 7l3 3"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 10a4 4 0 0 1-.5 8z"/></symbol>
+  </defs>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="badge">PRICING</span>
+    <h1>Plans and Pricing</h1>
+    <p class="sub">Pick the plan that fits your team today. Upgrade, downgrade or cancel whenever your needs change.</p>
+    <div class="toggle" role="group" aria-label="Billing period">
+      <button type="button" id="b-month" aria-pressed="true">Bill Monthly</button>
+      <button type="button" id="b-year" aria-pressed="false">Bill Annually<span class="save">Save 20%</span></button>
+    </div>
+  </header>
+
+  <section class="grid" aria-label="Pricing plans">
+
+    <!-- Free -->
+    <article class="card free">
+      <div class="top"><span class="icon-sq" aria-hidden="true"></span></div>
+      <h2 class="plan">Free Plan</h2>
+      <div class="price"><span class="amount">$0</span><span class="per">/month</span></div>
+      <p class="billed">Free forever</p>
+      <p class="desc">Everything you need to try the product and run a small personal project.</p>
+      <a class="cta" href="#">Start for Free</a>
+      <div class="divider">STAND OUT FEATURES</div>
+      <ul class="features">
+        <li><svg><use href="#i-folder"/></svg>Up to 3 projects</li>
+        <li><svg><use href="#i-users"/></svg>1 team member</li>
+        <li><svg><use href="#i-cloud"/></svg>1 GB storage</li>
+        <li><svg><use href="#i-chart"/></svg>Basic analytics</li>
+        <li><svg><use href="#i-mail"/></svg>Community support</li>
+      </ul>
+    </article>
+
+    <!-- Pro -->
+    <article class="card pro">
+      <div class="top"><span class="icon-sq" aria-hidden="true"></span><span class="pop">POPULAR</span></div>
+      <h2 class="plan">Pro Plan</h2>
+      <div class="price"><span class="amount" id="pro-price">$80</span><span class="per">/month</span></div>
+      <p class="billed" id="pro-billed">Billed monthly</p>
+      <p class="desc">For growing teams that need more room, faster tools and priority help.</p>
+      <a class="cta" href="#">Start Free 7 Days Trial</a>
+      <div class="divider">STAND OUT FEATURES</div>
+      <ul class="features">
+        <li><svg><use href="#i-folder"/></svg>Unlimited projects</li>
+        <li><svg><use href="#i-users"/></svg>Up to 10 team members</li>
+        <li><svg><use href="#i-cloud"/></svg>100 GB storage</li>
+        <li><svg><use href="#i-chart"/></svg>Advanced analytics</li>
+        <li><svg><use href="#i-zap"/></svg>Automations and integrations</li>
+        <li><svg><use href="#i-mail"/></svg>Priority email support</li>
+      </ul>
+    </article>
+
+    <!-- Advance -->
+    <article class="card adv">
+      <div class="top"><span class="icon-sq" aria-hidden="true"></span></div>
+      <h2 class="plan">Advance Plan</h2>
+      <div class="price"><span class="amount">Custom</span></div>
+      <p class="billed">Priced for your team size</p>
+      <p class="desc">For larger organizations with security, scale and onboarding requirements.</p>
+      <a class="cta" href="#">Contact Us</a>
+      <div class="divider">STAND OUT FEATURES</div>
+      <ul class="features">
+        <li><svg><use href="#i-layers"/></svg>Everything in Pro</li>
+        <li><svg><use href="#i-users"/></svg>Unlimited team members</li>
+        <li><svg><use href="#i-key"/></svg>Single sign-on (SSO)</li>
+        <li><svg><use href="#i-shield"/></svg>Audit logs and advanced security</li>
+        <li><svg><use href="#i-plug"/></svg>Custom integrations and API limits</li>
+        <li><svg><use href="#i-headset"/></svg>Dedicated success manager</li>
+      </ul>
+    </article>
+
+  </section>
+
+  <p class="foot">Start your journey risk free — No credit card needed</p>
+</main>
+
+<script>
+  var m = document.getElementById('b-month'), y = document.getElementById('b-year');
+  var price = document.getElementById('pro-price'), billed = document.getElementById('pro-billed');
+  function set(annual) {
+    m.setAttribute('aria-pressed', String(!annual));
+    y.setAttribute('aria-pressed', String(annual));
+    price.textContent = annual ? '$64' : '$80';
+    billed.textContent = annual ? 'Billed $768 per year' : 'Billed monthly';
+  }
+  m.addEventListener('click', function () { set(false); });
+  y.addEventListener('click', function () { set(true); });
+</script>
+</body>
+</html>
